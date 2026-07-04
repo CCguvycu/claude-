@@ -11,7 +11,7 @@ import {
 import { type ReleaseChannel, saveGlobalConfig } from './config.js'
 import { logForDebugging } from './debug.js'
 import { env } from './env.js'
-import { getClaudeConfigHomeDir } from './envUtils.js'
+import { getClaudeConfigHomeDir, isEnvTruthy } from './envUtils.js'
 import { ClaudeError, getErrnoCode, isENOENT } from './errors.js'
 import { execFileNoThrowWithCwd } from './execFileNoThrow.js'
 import { getFsImplementation } from './fsOperations.js'
@@ -69,6 +69,13 @@ export type MaxVersionConfig = {
  */
 export async function assertMinVersion(): Promise<void> {
   if (process.env.NODE_ENV === 'test') {
+    return
+  }
+
+  // Local Ollama backend: this is a self-hosted build with no connection to
+  // Anthropic's release channel, so the server-side minimum-version gate does
+  // not apply. Skip it (and the network round-trip it needs).
+  if (isEnvTruthy(process.env.CLAUDE_CODE_USE_OLLAMA)) {
     return
   }
 

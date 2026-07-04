@@ -167,6 +167,13 @@ export const WebSearchTool = buildTool({
   },
   isEnabled() {
     const provider = getAPIProvider()
+
+    // Server-side web search is an Anthropic-API feature; local models can't
+    // use it. Disable it under the Ollama backend.
+    if (provider === 'ollama') {
+      return false
+    }
+
     const model = getMainLoopModel()
 
     // Enable for firstParty

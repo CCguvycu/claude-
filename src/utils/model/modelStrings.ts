@@ -23,9 +23,16 @@ export type ModelStrings = Record<ModelKey, string>
 const MODEL_KEYS = Object.keys(ALL_MODEL_CONFIGS) as ModelKey[]
 
 function getBuiltinModelStrings(provider: APIProvider): ModelStrings {
+  // Ollama is a local backend with no entry in ALL_MODEL_CONFIGS. Reuse the
+  // first-party canonical model ids as placeholders — the Ollama fetch shim
+  // (services/api/ollama.ts) maps every incoming model id onto the configured
+  // OLLAMA_MODEL, so these names are only ever used for display/allowlisting.
+  // Without this, every lookup would be `undefined` and model resolution would
+  // recurse infinitely.
+  const effectiveProvider = provider === 'ollama' ? 'firstParty' : provider
   const out = {} as ModelStrings
   for (const key of MODEL_KEYS) {
-    out[key] = ALL_MODEL_CONFIGS[key][provider]
+    out[key] = ALL_MODEL_CONFIGS[key][effectiveProvider]
   }
   return out
 }

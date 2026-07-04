@@ -1,7 +1,73 @@
 # Claude Code 
 
+> **Local-model fork.** This build adds a native **Ollama** backend so the CLI
+> runs entirely against local models — no Anthropic account or API key required.
+> See [Local models via Ollama](#local-models-via-ollama) below.
 
+## Local models via Ollama
 
+Run the full agent loop (tools, streaming, everything) against a model served by
+a local [Ollama](https://ollama.com) instance.
+
+### One command: `arkcli`
+
+A global `arkcli` command is installed (at `%APPDATA%\npm\arkcli.cmd`, already on
+PATH). Run it from **any** directory — that directory becomes the agent's
+workspace:
+
+```powershell
+ollama serve                    # start Ollama, pull a model once:
+ollama pull llama3.1            #   (or a coder model, e.g. qwen2.5-coder:7b)
+
+arkcli                          # interactive session in the current folder
+arkcli -p "summarize this project"   # one-shot
+arkcli --help                   # any Claude Code flag works
+```
+
+`arkcli` presets `CLAUDE_CODE_USE_OLLAMA` and the other env vars below, so there
+is nothing else to configure. Override the model for one run:
+
+```powershell
+$env:OLLAMA_MODEL="qwen2.5-coder:7b"; arkcli -p "refactor foo.ts"
+```
+
+> To relocate the repo, edit `ARK_REPO` at the top of `%APPDATA%\npm\arkcli.cmd`.
+
+> **Terminal note.** Run `arkcli` in **PowerShell**, **Command Prompt**, or
+> **Windows Terminal**. **Git Bash / MINGW (mintty) cannot send keystrokes to
+> the interactive UI** — Enter and arrow keys will appear dead. If you must use
+> Git Bash, prefix with winpty: `winpty arkcli`. The local build skips all
+> onboarding / trust / API-key dialogs, so a proper terminal drops you straight
+> at the prompt.
+
+### Manual invocation
+
+Or set the environment variables yourself and run the CLI directly:
+
+| Variable | Default | Purpose |
+|----------|---------|---------|
+| `CLAUDE_CODE_USE_OLLAMA` | — | Set to `1` to route all model calls to Ollama. |
+| `OLLAMA_BASE_URL` | `http://localhost:11434` | Ollama server URL. |
+| `OLLAMA_MODEL` | `llama3.1:latest` | Model tag to use for every request. |
+| `OLLAMA_NUM_CTX` | `32768` | Context window (tokens) requested from Ollama. |
+
+```bash
+CLAUDE_CODE_USE_OLLAMA=1 OLLAMA_MODEL=qwen2.5-coder:7b bun run start -- -p "hello"
+```
+
+**How it works.** Nothing downstream changed. A single translation shim
+(`src/services/api/ollama.ts`) is handed to the Anthropic SDK as a custom
+`fetch`; it converts each outgoing Anthropic Messages request into an Ollama
+`/api/chat` call and re-encodes the reply (streaming SSE, tool calls, and
+`count_tokens`) back into the exact Anthropic wire format the app expects. The
+provider is selected in `src/utils/model/providers.ts` and wired in
+`src/services/api/client.ts`, mirroring the existing Bedrock/Vertex/Foundry
+branches.
+
+**Model choice matters.** Claude Code's system prompt is large and assumes a
+frontier model. Small models (e.g. 8B) work but can be inconsistent at agentic
+tool use — prefer a larger or coder-tuned model (`qwen2.5-coder`, `llama3.3`,
+etc.) for reliable tool calling.
 
 ## Quick Setup
 

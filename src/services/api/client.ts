@@ -17,6 +17,7 @@ import {
   isFirstPartyAnthropicBaseUrl,
 } from 'src/utils/model/providers.js'
 import { getProxyFetchOptions } from 'src/utils/proxy.js'
+import { createOllamaFetch, getOllamaBaseUrl } from './ollama.js'
 import {
   getIsNonInteractiveSession,
   getSessionId,
@@ -126,6 +127,25 @@ export async function getAnthropicClient({
   )
   if (additionalProtectionEnabled) {
     defaultHeaders['x-anthropic-additional-protection'] = 'true'
+  }
+
+  // --- Ollama (local models) ------------------------------------------------
+  // Route everything through a local Ollama server via the protocol shim in
+  // ./ollama.ts. No Anthropic auth, OAuth, proxy negotiation, or beta headers
+  // are needed, so we return early before any of that runs.
+  if (isEnvTruthy(process.env.CLAUDE_CODE_USE_OLLAMA)) {
+    const baseUrl = getOllamaBaseUrl()
+    logForDebugging(`[API:ollama] Using local Ollama backend at ${baseUrl}`)
+    return new Anthropic({
+      apiKey: 'ollama', // unused by the shim; the SDK just requires a value
+      baseURL: baseUrl,
+      defaultHeaders,
+      maxRetries,
+      timeout: parseInt(process.env.API_TIMEOUT_MS || String(600 * 1000), 10),
+      dangerouslyAllowBrowser: true,
+      fetch: createOllamaFetch(baseUrl),
+      ...(isDebugToStdErr() && { logger: createStderrLogger() }),
+    })
   }
 
   logForDebugging('[API:auth] OAuth token check starting')

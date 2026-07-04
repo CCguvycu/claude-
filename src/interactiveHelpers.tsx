@@ -103,6 +103,7 @@ export async function renderAndRun(root: Root, element: React.ReactNode): Promis
 }
 export async function showSetupScreens(root: Root, permissionMode: PermissionMode, allowDangerouslySkipPermissions: boolean, commands?: Command[], claudeInChrome?: boolean, devChannels?: ChannelEntry[]): Promise<boolean> {
   if ("production" === 'test' || isEnvTruthy(false) || process.env.IS_DEMO // Skip onboarding in demo mode
+    || isEnvTruthy(process.env.CLAUDE_CODE_USE_OLLAMA) // Local Ollama build: no Anthropic auth/onboarding/API-key approval needed
   ) {
     return false;
   }
