@@ -1,0 +1,203 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>ARK // terminal</title>
+<style>
+  :root{
+    --bg:#0a0e0a; --bg2:#0d140d; --fg:#00ff41; --dim:#0a8a2a; --dim2:#0d5a22;
+    --warn:#ffd000; --err:#ff2d2d; --tool:#00e5ff; --user:#c8ffd0;
+    --mono:"Cascadia Code","JetBrains Mono","Consolas","Courier New",monospace;
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%;margin:0}
+  body{
+    background:
+      radial-gradient(1200px 600px at 50% -10%, #06210c 0%, transparent 60%),
+      var(--bg);
+    color:var(--fg); font-family:var(--mono); font-size:14px; line-height:1.5;
+    display:flex; flex-direction:column; height:100vh; overflow:hidden;
+    text-shadow:0 0 4px rgba(0,255,65,.35);
+  }
+  canvas#matrix{position:fixed;inset:0;z-index:0;opacity:.10;pointer-events:none}
+  header,main,footer{position:relative;z-index:1}
+  header{
+    padding:10px 16px;border-bottom:1px solid var(--dim2);
+    display:flex;justify-content:space-between;align-items:center;gap:12px;
+    background:linear-gradient(180deg,rgba(0,20,5,.6),transparent);
+  }
+  .brand{white-space:pre;font-size:11px;line-height:1.05;color:var(--fg)}
+  .stat{font-size:11px;color:var(--dim);text-align:right}
+  .stat b{color:var(--fg)}
+  .dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--err);
+       box-shadow:0 0 8px currentColor;margin-right:5px;vertical-align:middle}
+  .dot.on{background:var(--fg)}
+  .dot.busy{background:var(--warn);animation:blink .6s steps(2) infinite}
+  @keyframes blink{50%{opacity:.2}}
+  main{flex:1;overflow-y:auto;padding:16px;scroll-behavior:smooth}
+  main::-webkit-scrollbar{width:10px}
+  main::-webkit-scrollbar-thumb{background:var(--dim2)}
+  .msg{margin:0 0 14px;max-width:900px}
+  .role{font-size:11px;letter-spacing:.12em;text-transform:uppercase;opacity:.8;margin-bottom:2px}
+  .msg.user .role{color:var(--user)}
+  .msg.ark  .role{color:var(--fg)}
+  .msg.user .body{color:var(--user)}
+  .body{white-space:pre-wrap;word-break:break-word}
+  .body code{background:#04140699;padding:0 3px;border-radius:3px}
+  .body pre{background:#04120699;border:1px solid var(--dim2);border-left:3px solid var(--fg);
+            padding:10px;overflow:auto;margin:8px 0}
+  .tool{border:1px solid var(--dim2);border-left:3px solid var(--tool);background:#031014aa;
+        margin:8px 0;padding:8px 10px;color:var(--tool);font-size:12px}
+  .tool .t-name{color:var(--tool);font-weight:bold}
+  .tool .t-arg{color:#8fdfff;opacity:.85;white-space:pre-wrap;word-break:break-all}
+  .tool .t-res{color:var(--dim);white-space:pre-wrap;max-height:180px;overflow:auto;
+               margin-top:6px;border-top:1px dashed var(--dim2);padding-top:6px}
+  .sys{color:var(--dim);font-size:12px;font-style:italic;margin:6px 0}
+  .err{color:var(--err)}
+  .caret::after{content:"\2588";animation:blink 1s steps(2) infinite;color:var(--fg)}
+  footer{border-top:1px solid var(--dim2);padding:10px 12px;background:rgba(0,15,4,.6)}
+  .chips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px}
+  .chip{border:1px solid var(--dim2);color:var(--dim);background:#04120644;
+        padding:2px 8px;font-size:11px;cursor:pointer;border-radius:2px;font-family:var(--mono)}
+  .chip:hover{color:var(--fg);border-color:var(--fg);box-shadow:0 0 6px rgba(0,255,65,.3)}
+  .inputrow{display:flex;align-items:center;gap:8px}
+  .prompt{color:var(--fg);font-weight:bold}
+  #input{flex:1;background:transparent;border:none;outline:none;color:var(--user);
+         font-family:var(--mono);font-size:14px;caret-color:var(--fg)}
+  #send{background:transparent;border:1px solid var(--dim2);color:var(--fg);
+        font-family:var(--mono);padding:4px 12px;cursor:pointer}
+  #send:hover{border-color:var(--fg);box-shadow:0 0 8px rgba(0,255,65,.35)}
+  #send:disabled{opacity:.4;cursor:not-allowed}
+</style>
+</head>
+<body>
+<canvas id="matrix"></canvas>
+
+<header>
+  <div class="brand">   a8888b.   <b>ARK</b> // local offline hacker assistant
+  d888888b.  ------------------------------------------
+  8P"YP"Y88  awaiting objective, operator.</div>
+  <div class="stat">
+    <div><span id="dot" class="dot"></span><span id="conn">connecting…</span></div>
+    <div>model: <b id="model">—</b></div>
+    <div>backend: <b>ollama</b> · net: <b>OFFLINE</b></div>
+  </div>
+</header>
+
+<main id="log"></main>
+
+<footer>
+  <div class="chips" id="chips"></div>
+  <div class="inputrow">
+    <span class="prompt">operator&gt;</span>
+    <input id="input" autocomplete="off" spellcheck="false"
+           placeholder="type an objective or /command …" autofocus />
+    <button id="send">EXEC</button>
+  </div>
+</footer>
+
+<script>
+const CMDS = ["/recon","/scan","/enum","/osint","/decode","/hashcrack","/payload","/ctf","/harden"];
+const log = document.getElementById('log');
+const input = document.getElementById('input');
+const sendBtn = document.getElementById('send');
+const dot = document.getElementById('dot');
+const conn = document.getElementById('conn');
+const modelEl = document.getElementById('model');
+const chips = document.getElementById('chips');
+let busy = false, ws, curArk = null;
+
+CMDS.forEach(c=>{
+  const b=document.createElement('span'); b.className='chip'; b.textContent=c;
+  b.onclick=()=>{ input.value = c + ' '; input.focus(); };
+  chips.appendChild(b);
+});
+
+function el(cls, html){ const d=document.createElement('div'); d.className=cls; if(html!=null) d.innerHTML=html; return d; }
+function esc(s){ return (s||'').replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c])); }
+function fmt(s){ // minimal markdown: fenced code + inline code
+  s = esc(s);
+  s = s.replace(/```(\w*)\n?([\s\S]*?)```/g,(_,l,c)=>'<pre>'+c.replace(/\n$/,'')+'</pre>');
+  s = s.replace(/`([^`]+)`/g,'<code>$1</code>');
+  return s;
+}
+function atBottom(){ return log.scrollHeight - log.scrollTop - log.clientHeight < 80; }
+function scroll(){ log.scrollTop = log.scrollHeight; }
+
+function addUser(text){
+  const m=el('msg user'); m.appendChild(el('role','operator'));
+  const b=el('body'); b.textContent=text; m.appendChild(b); log.appendChild(m); scroll();
+}
+function startArk(){
+  const m=el('msg ark'); m.appendChild(el('role','ark'));
+  const b=el('body'); b.classList.add('caret'); m.appendChild(b);
+  log.appendChild(m); curArk={msg:m,body:b,text:''}; scroll();
+}
+function arkText(t){
+  if(!curArk) startArk();
+  curArk.text += t; curArk.body.innerHTML = fmt(curArk.text);
+  curArk.body.classList.add('caret'); if(atBottom()) scroll();
+}
+function endArk(){ if(curArk){ curArk.body.classList.remove('caret'); curArk=null; } }
+function addTool(name,arg){
+  const t=el('tool'); t.innerHTML='<span class="t-name">▸ '+esc(name)+'</span> <span class="t-arg">'+esc(arg||'')+'</span>';
+  const res=el('t-res'); res.style.display='none'; t.appendChild(res);
+  log.appendChild(t); if(atBottom()) scroll(); return {t,res};
+}
+function addSys(t,cls){ const s=el('sys '+(cls||'')); s.textContent=t; log.appendChild(s); if(atBottom()) scroll(); }
+
+let lastTool=null;
+function handle(m){
+  switch(m.type){
+    case 'ready': modelEl.textContent=m.model||'—'; break;
+    case 'status': addSys(m.text); break;
+    case 'assistant': arkText(m.text); break;
+    case 'tool_use': endArk(); lastTool=addTool(m.name, typeof m.input==='string'?m.input:JSON.stringify(m.input||{})); break;
+    case 'tool_result':
+      if(lastTool){ lastTool.res.style.display='block'; lastTool.res.textContent=(m.content||'').slice(0,4000); }
+      break;
+    case 'result': endArk(); setBusy(false); break;
+    case 'error': endArk(); addSys(m.text,'err'); setBusy(false); break;
+  }
+}
+function setBusy(b){
+  busy=b; sendBtn.disabled=b; input.disabled=b;
+  dot.className='dot '+(b?'busy':'on');
+  conn.textContent=b?'working…':'online';
+  if(!b) input.focus();
+}
+function send(){
+  const text=input.value.trim(); if(!text||busy||!ws||ws.readyState!==1) return;
+  addUser(text); input.value=''; setBusy(true);
+  ws.send(JSON.stringify({type:'prompt',text}));
+}
+sendBtn.onclick=send;
+input.addEventListener('keydown',e=>{ if(e.key==='Enter'&&!e.shiftKey){ e.preventDefault(); send(); }});
+
+function connect(){
+  ws=new WebSocket('ws://'+location.host+'/ws');
+  ws.onopen=()=>{ dot.className='dot on'; conn.textContent='online'; };
+  ws.onclose=()=>{ dot.className='dot'; conn.textContent='disconnected'; setTimeout(connect,1500); };
+  ws.onmessage=e=>{ try{ handle(JSON.parse(e.data)); }catch{} };
+}
+connect();
+
+// matrix rain
+(function(){
+  const c=document.getElementById('matrix'),x=c.getContext('2d');
+  let cols,drops; const glyph="01<>[]{}/\\|=+*#$%&ABCDEF0123456789";
+  function size(){ c.width=innerWidth; c.height=innerHeight; cols=Math.floor(c.width/14); drops=Array(cols).fill(1); }
+  size(); addEventListener('resize',size);
+  setInterval(()=>{
+    x.fillStyle='rgba(6,14,6,.15)'; x.fillRect(0,0,c.width,c.height);
+    x.fillStyle='#00ff41'; x.font='14px monospace';
+    for(let i=0;i<cols;i++){
+      x.fillText(glyph[Math.floor(Math.random()*glyph.length)], i*14, drops[i]*14);
+      if(drops[i]*14>c.height && Math.random()>.975) drops[i]=0; drops[i]++;
+    }
+  },70);
+})();
+</script>
+</body>
+</html>

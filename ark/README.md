@@ -27,6 +27,17 @@ this repo). To (re)install on this machine:
 
 Then `arkcli` works from any directory. Persona lives in `../ark-persona.md`.
 
+5. **GUI** (optional) — hacker web UI. Copy the launcher and run it:
+   ```
+   copy ark\arkgui.cmd %APPDATA%\npm\arkgui.cmd
+   arkgui
+   ```
+   `arkgui` starts a local Bun server (`ark-gui/server.ts`, default port 8788)
+   and opens the browser. The page drives ONE persistent ARK process over a
+   WebSocket in stream-json mode, so context persists and startup is paid once.
+   ARK operates in the folder you launched `arkgui` from. Close the server
+   window to stop it. (`bun run ark:gui` runs the server without opening a browser.)
+
 ## What ARK is
 Claude Code re-pointed at a local Ollama model via a fetch-layer translation
 shim (`src/services/api/ollama.ts`), with a hacker persona, custom security
