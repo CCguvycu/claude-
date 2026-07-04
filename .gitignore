@@ -8,3 +8,4 @@ package-lock.json
 
 # ARK: vendored ripgrep binary (reproduce with `bun run ark:vendor-rg`)
 src/utils/vendor/
+ark_prompt_dump.txt

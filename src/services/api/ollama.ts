@@ -831,6 +831,18 @@ export function createOllamaFetch(baseUrl: string): typeof fetch {
     const ollamaReq = buildOllamaRequest(req, wantStream)
     const outModel = mapModel(req.model)
 
+    // ARK debug: dump the outgoing request (messages+tools) to a file so we can
+    // see exactly what the local model receives. Guarded by ARK_DUMP_PROMPT.
+    if (process.env.ARK_DUMP_PROMPT) {
+      try {
+        const fs = await import('fs')
+        fs.appendFileSync(
+          process.env.ARK_DUMP_PROMPT,
+          JSON.stringify(ollamaReq, null, 2) + '\n=====\n',
+        )
+      } catch {}
+    }
+
     let ollamaResp: Response
     try {
       ollamaResp = await fetch(`${ollamaBase}/api/chat`, {
