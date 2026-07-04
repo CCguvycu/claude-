@@ -200,7 +200,18 @@ function buildOllamaRequest(
   stream: boolean,
 ): Record<string, unknown> {
   const options: Record<string, unknown> = { num_ctx: getNumCtx() }
-  if (typeof req.temperature === 'number') options.temperature = req.temperature
+  // Local models follow "call this tool" instructions far more reliably at a low
+  // temperature. Claude Code's main loop asks for ~1.0, which makes small models
+  // chatty and prone to describing a command instead of calling the tool. Clamp
+  // to a low ceiling; override with OLLAMA_TEMPERATURE (set to the passthrough
+  // value, e.g. "1", to disable the clamp).
+  const tempOverride = process.env.OLLAMA_TEMPERATURE
+  const tempCeiling = tempOverride !== undefined ? Number(tempOverride) : 0.3
+  if (typeof req.temperature === 'number')
+    options.temperature = Number.isFinite(tempCeiling)
+      ? Math.min(req.temperature, tempCeiling)
+      : req.temperature
+  else if (Number.isFinite(tempCeiling)) options.temperature = tempCeiling
   if (typeof req.top_p === 'number') options.top_p = req.top_p
   if (typeof req.max_tokens === 'number') options.num_predict = req.max_tokens
   if (req.stop_sequences && req.stop_sequences.length > 0) {

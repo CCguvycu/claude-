@@ -9,8 +9,9 @@
     "dev": "bun --watch run src/entrypoints/cli.tsx",
     "build": "bun build src/entrypoints/cli.tsx --outdir dist --target bun --define 'MACRO.VERSION=\"1.0.0-dev\"' --define 'MACRO.BUILD_TIME=\"\"' --define 'MACRO.PACKAGE_URL=\"@anthropic-ai/claude-code\"' --define 'MACRO.NATIVE_PACKAGE_URL=\"\"' --define 'MACRO.FEEDBACK_CHANNEL=\"\"' --define 'MACRO.ISSUES_EXPLAINER=\"\"' --define 'MACRO.VERSION_CHANGELOG=\"\"'",
     "typecheck": "bun x tsc --noEmit",
-    "ark:build": "bun build src/entrypoints/cli.tsx --outdir dist --target bun --packages=external --external bun:bundle --define 'MACRO.VERSION=\"1.0.0-dev\"' --define 'MACRO.BUILD_TIME=\"\"' --define 'MACRO.PACKAGE_URL=\"@anthropic-ai/claude-code\"' --define 'MACRO.NATIVE_PACKAGE_URL=\"\"' --define 'MACRO.FEEDBACK_CHANNEL=\"\"' --define 'MACRO.ISSUES_EXPLAINER=\"\"' --define 'MACRO.VERSION_CHANGELOG=\"\"'",
-    "ark:gui": "bun ark-gui/server.ts"
+    "ark:build": "bun build src/entrypoints/cli.tsx --outdir dist --target bun --packages=external --external bun:bundle --define 'MACRO.VERSION=\"1.0.0-dev\"' --define 'MACRO.BUILD_TIME=\"\"' --define 'MACRO.PACKAGE_URL=\"@anthropic-ai/claude-code\"' --define 'MACRO.NATIVE_PACKAGE_URL=\"\"' --define 'MACRO.FEEDBACK_CHANNEL=\"\"' --define 'MACRO.ISSUES_EXPLAINER=\"\"' --define 'MACRO.VERSION_CHANGELOG=\"\"' && bun scripts/ark-vendor-ripgrep.mjs",
+    "ark:gui": "bun ark-gui/server.ts",
+    "ark:vendor-rg": "bun scripts/ark-vendor-ripgrep.mjs"
   },
   "dependencies": {
     "@alcalzone/ansi-tokenize": "^0.1.0",

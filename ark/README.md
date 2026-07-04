@@ -19,6 +19,12 @@ this repo). To (re)install on this machine:
    bun install
    bun run ark:build
    ```
+   `ark:build` also runs `ark:vendor-rg`, which copies a working `rg.exe` into
+   `src/utils/vendor/` and `dist/vendor/`. This is REQUIRED: the upstream leak
+   ships without a ripgrep binary, and without it custom `/commands` (and the Grep
+   tool) silently fail to load. Re-run `bun run ark:vendor-rg` if it ever goes missing.
+   The launchers also set `CLAUDE_CODE_USE_NATIVE_FILE_SEARCH=1` as a fallback so
+   commands still load even without the binary.
 
 4. **Model** — needs Ollama running with a tool-capable model:
    ```

@@ -25,6 +25,9 @@ const HTML = await Bun.file(join(HERE, 'index.html')).text()
 const ENV = {
   ...process.env,
   CLAUDE_CODE_USE_OLLAMA: '1',
+  // Force native (Node) file search for command/skill discovery. The bundled
+  // ripgrep can be absent; this guarantees ~/.claude/commands/*.md still load.
+  CLAUDE_CODE_USE_NATIVE_FILE_SEARCH: '1',
   OLLAMA_MODEL: MODEL,
   ANTHROPIC_API_KEY: process.env.ANTHROPIC_API_KEY || 'ollama',
   CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC: '1',
@@ -98,6 +101,9 @@ function ensureProc(ws: any, client: Client) {
     'stream-json',
     '--verbose',
     '--dangerously-skip-permissions',
+    // Offline assistant: ignore claude.ai-connected MCP servers (Gmail/Drive/…).
+    // They add ~25 irrelevant tools that hurt a small model's tool selection.
+    '--strict-mcp-config',
     '--append-system-prompt-file',
     join(REPO, 'ark-persona.md'),
   ]

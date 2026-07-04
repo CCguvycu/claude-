@@ -3,6 +3,7 @@ setlocal
 set "ARK_REPO=C:\Users\cull_\claude-"
 
 set "CLAUDE_CODE_USE_OLLAMA=1"
+set "CLAUDE_CODE_USE_NATIVE_FILE_SEARCH=1"
 if not defined OLLAMA_BASE_URL set "OLLAMA_BASE_URL=http://localhost:11434"
 if not defined OLLAMA_MODEL set "OLLAMA_MODEL=qwen2.5-coder:7b"
 if not defined OLLAMA_NUM_CTX set "OLLAMA_NUM_CTX=32768"
@@ -36,11 +37,11 @@ echo(
 
 :launch
 if exist "%ARK_REPO%\dist\cli.js" goto bundle
-bun --preload "%ARK_REPO%\plugins\arkMacro.ts" --preload "%ARK_REPO%\plugins\bunBundleDev.ts" "%ARK_REPO%\src\entrypoints\cli.tsx" --append-system-prompt-file "%ARK_PERSONA%" %*
+bun --preload "%ARK_REPO%\plugins\arkMacro.ts" --preload "%ARK_REPO%\plugins\bunBundleDev.ts" "%ARK_REPO%\src\entrypoints\cli.tsx" --strict-mcp-config --append-system-prompt-file "%ARK_PERSONA%" %*
 goto done
 
 :bundle
-bun --preload "%ARK_REPO%\plugins\bunBundleDev.ts" "%ARK_REPO%\dist\cli.js" --append-system-prompt-file "%ARK_PERSONA%" %*
+bun --preload "%ARK_REPO%\plugins\bunBundleDev.ts" "%ARK_REPO%\dist\cli.js" --strict-mcp-config --append-system-prompt-file "%ARK_PERSONA%" %*
 
 :done
 endlocal
