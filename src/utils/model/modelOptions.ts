@@ -16,6 +16,7 @@ import { getSettings_DEPRECATED } from '../settings/settings.js'
 import { checkOpus1mAccess, checkSonnet1mAccess } from './check1mAccess.js'
 import { getAPIProvider } from './providers.js'
 import { isModelAllowed } from './modelAllowlist.js'
+import { getOllamaModelOptions } from './ollamaModels.js'
 import {
   getCanonicalName,
   getClaudeAiUserDefaultModelDescription,
@@ -269,6 +270,13 @@ function getOpusPlanOption(): ModelOption {
 // @[MODEL LAUNCH]: Update the model picker lists below to include/reorder options for the new model.
 // Each user tier (ant, Max/Team Premium, Pro/Team Standard/Enterprise, PAYG 1P, PAYG 3P) has its own list.
 function getModelOptionsBase(fastMode = false): ModelOption[] {
+  // ARK: when routing to a local Ollama server, none of the Claude/3P model
+  // lists apply — offer the curated Ollama roster instead. Its option values
+  // are real Ollama tags, which the fetch shim passes straight through.
+  if (getAPIProvider() === 'ollama') {
+    return getOllamaModelOptions()
+  }
+
   if (process.env.USER_TYPE === 'ant') {
     // Build options from antModels config
     const antModelOptions: ModelOption[] = getAntModels().map(m => ({

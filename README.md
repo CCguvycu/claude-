@@ -31,6 +31,13 @@ is nothing else to configure. Override the model for one run:
 $env:OLLAMA_MODEL="qwen2.5-coder:7b"; arkcli -p "refactor foo.ts"
 ```
 
+**Switching models mid-session.** Just like stock Claude Code, run `/model` in an
+interactive session to pick from a roster of 25 well-known Ollama models (coding,
+reasoning, and general, small→large). Selecting one switches the live model
+immediately — no restart. Any models you've already `ollama pull`ed are listed
+first and tagged **· installed**; the rest are still selectable and will prompt
+you to pull them on first use. Your configured `OLLAMA_MODEL` always appears too.
+
 > To relocate the repo, edit `ARK_REPO` at the top of `%APPDATA%\npm\arkcli.cmd`.
 
 > **Terminal note.** Run `arkcli` in **PowerShell**, **Command Prompt**, or

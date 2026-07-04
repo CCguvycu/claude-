@@ -109,9 +109,40 @@ async function fetchBootstrapAPI(): Promise<BootstrapResponse | null> {
 }
 
 /**
+ * ARK: best-effort probe of the local Ollama server for installed models, so
+ * the `/model` picker can surface the user's pulled tags first. Never throws —
+ * a missing/unreachable server just leaves the roster un-annotated.
+ */
+async function fetchInstalledOllamaTags(): Promise<void> {
+  if (getAPIProvider() !== 'ollama') return
+  try {
+    const base = (
+      process.env.OLLAMA_BASE_URL || 'http://localhost:11434'
+    ).replace(/\/+$/, '')
+    const response = await axios.get<{ models?: Array<{ name?: string }> }>(
+      `${base}/api/tags`,
+      { timeout: 3000 },
+    )
+    const tags = (response.data.models ?? [])
+      .map(m => m.name)
+      .filter((n): n is string => typeof n === 'string')
+    const { setInstalledOllamaTags } = await import(
+      '../../utils/model/ollamaModels.js'
+    )
+    setInstalledOllamaTags(tags)
+    logForDebugging(`[Bootstrap] Ollama installed models: ${tags.length}`)
+  } catch (error) {
+    logForDebugging(
+      `[Bootstrap] Ollama /api/tags probe failed: ${axios.isAxiosError(error) ? (error.code ?? error.response?.status) : 'unknown'}`,
+    )
+  }
+}
+
+/**
  * Fetch bootstrap data from the API and persist to disk cache.
  */
 export async function fetchBootstrapData(): Promise<void> {
+  await fetchInstalledOllamaTags()
   try {
     const response = await fetchBootstrapAPI()
     if (!response) return
