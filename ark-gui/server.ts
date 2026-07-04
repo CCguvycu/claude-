@@ -9,6 +9,8 @@
 
 import { join, dirname } from 'path'
 import { fileURLToPath } from 'url'
+import { tmpdir } from 'os'
+import { writeFileSync } from 'fs'
 
 const HERE = dirname(fileURLToPath(import.meta.url))
 const REPO = join(HERE, '..')
@@ -99,7 +101,11 @@ function ensureProc(ws: any, client: Client) {
     '--append-system-prompt-file',
     join(REPO, 'ark-persona.md'),
   ]
-  const proc = Bun.spawn(['bun', ...args], {
+  // Use the absolute path of THIS bun binary — spawning bare "bun" fails with
+  // ENOENT/uv_spawn on Windows when PATH resolution doesn't cover bun.exe/.cmd
+  // (e.g. launched from a plain console via arkgui.cmd).
+  const BUN = process.execPath || 'bun'
+  const proc = Bun.spawn([BUN, ...args], {
     cwd: WORKDIR,
     env: ENV,
     stdin: 'pipe',
@@ -153,9 +159,8 @@ function sendTurn(client: Client, prompt: string) {
   client.stdin.flush?.()
 }
 
-const server = Bun.serve<Client>({
-  port: PORT,
-  fetch(req, srv) {
+const handlers = {
+  fetch(req: Request, srv: any) {
     if (srv.upgrade(req, { data: { started: false, busy: false } })) return
     const url = new URL(req.url)
     if (url.pathname === '/' || url.pathname === '/index.html') {
@@ -187,14 +192,36 @@ const server = Bun.serve<Client>({
         client.busy = false
       }
     },
-    close(ws) {
+    close(ws: any) {
       try {
         ws.data.stdin?.end?.()
         ws.data.proc?.kill()
       } catch {}
     },
   },
-})
+}
 
-console.error(`\n  ARK GUI online  ->  http://localhost:${server.port}`)
+// Bind to the first free port from PORT upward, so a stale/zombie process on
+// the default port never blocks startup. Write the chosen URL where the
+// launcher can read it to open the right browser tab.
+let server: any
+let chosen = PORT
+for (let p = PORT; p < PORT + 12; p++) {
+  try {
+    server = Bun.serve<Client>({ port: p, ...(handlers as any) })
+    chosen = p
+    break
+  } catch (e) {
+    if (p === PORT + 11) {
+      console.error(`Could not bind any port in ${PORT}-${PORT + 11}: ${e}`)
+      process.exit(1)
+    }
+  }
+}
+const URL_STR = `http://localhost:${chosen}`
+try {
+  writeFileSync(join(tmpdir(), 'ark-gui-url.txt'), URL_STR)
+} catch {}
+
+console.error(`\n  ARK GUI online  ->  ${URL_STR}`)
 console.error(`  model: ${MODEL}   workspace: ${WORKDIR}\n`)

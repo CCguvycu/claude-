@@ -18,7 +18,10 @@ echo   model: %OLLAMA_MODEL%   workspace: %CD%
 echo   (a server window will open; close it to stop ARK)
 echo.
 
+del "%TEMP%\ark-gui-url.txt" >nul 2>&1
 start "ARK GUI server" bun "%ARK_REPO%\ark-gui\server.ts"
-"%SystemRoot%\System32\ping.exe" -n 4 127.0.0.1 >nul
-start "" http://localhost:%ARK_GUI_PORT%
+"%SystemRoot%\System32\ping.exe" -n 5 127.0.0.1 >nul
+set "ARK_URL=http://localhost:%ARK_GUI_PORT%"
+if exist "%TEMP%\ark-gui-url.txt" set /p ARK_URL=<"%TEMP%\ark-gui-url.txt"
+start "" %ARK_URL%
 endlocal

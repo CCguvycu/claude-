@@ -99,7 +99,11 @@ function ensureProc(ws: any, client: Client) {
     '--append-system-prompt-file',
     join(REPO, 'ark-persona.md'),
   ]
-  const proc = Bun.spawn(['bun', ...args], {
+  // Use the absolute path of THIS bun binary — spawning bare "bun" fails with
+  // ENOENT/uv_spawn on Windows when PATH resolution doesn't cover bun.exe/.cmd
+  // (e.g. launched from a plain console via arkgui.cmd).
+  const BUN = process.execPath || 'bun'
+  const proc = Bun.spawn([BUN, ...args], {
     cwd: WORKDIR,
     env: ENV,
     stdin: 'pipe',
