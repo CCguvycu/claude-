@@ -1,0 +1,31 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "arkx-forge"
+version = "1.0.0"
+description = "ARKX Forge — a local AI development command center for autonomous coding agents"
+requires-python = ">=3.10"
+dependencies = [
+  "anthropic>=1.9.0",
+  "fastapi>=0.115",
+  "uvicorn>=0.30",
+  "pydantic>=2.7",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8.0", "pytest-asyncio>=0.23"]
+
+[project.scripts]
+forge = "forge.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["forge*"]
+
+[tool.setuptools.package-data]
+forge = ["static/*", "static/css/*", "static/js/*"]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]

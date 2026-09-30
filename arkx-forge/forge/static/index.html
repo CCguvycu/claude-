@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ARKX FORGE</title>
+<link rel="stylesheet" href="/static/css/forge.css">
+</head>
+<body>
+<header id="topbar">
+  <div class="brand">ARKX<span>FORGE</span></div>
+  <div class="bar-fields">
+    <div class="field"><label>PROJECT</label><span id="bar-project">—</span></div>
+    <div class="field"><label>BRANCH</label><span id="bar-branch">—</span></div>
+    <div class="field"><label>MODEL</label><span id="bar-model">—</span></div>
+    <div class="field"><label>AGENT</label><span id="bar-agent" class="agent-idle">IDLE</span></div>
+  </div>
+  <div class="bar-right">
+    <span id="bar-warning" class="warn hidden"></span>
+    <span id="bar-link" class="link-dot" title="event stream">STREAM ○</span>
+  </div>
+</header>
+
+<main id="layout">
+  <!-- LEFT -->
+  <aside id="sidebar">
+    <section class="panel">
+      <h2>PROJECTS <button id="btn-add-project" class="mini">+ ADD</button></h2>
+      <div id="add-project-form" class="hidden">
+        <input id="project-path" type="text" placeholder="/absolute/path/to/repo" spellcheck="false">
+        <div class="row"><button id="btn-save-project" class="primary mini">OPEN</button>
+        <button id="btn-cancel-project" class="mini">CANCEL</button></div>
+        <p id="project-error" class="err"></p>
+      </div>
+      <ul id="project-list" class="list"></ul>
+    </section>
+
+    <section class="panel">
+      <h2>ACTIVE PROJECT</h2>
+      <div id="active-project" class="kv muted">No project selected.</div>
+    </section>
+
+    <section class="panel grow">
+      <h2>TASK HISTORY</h2>
+      <ul id="task-list" class="list"></ul>
+    </section>
+
+    <section class="panel">
+      <h2>AGENTS</h2>
+      <ul id="agent-list" class="list agents"></ul>
+    </section>
+  </aside>
+
+  <!-- CENTER -->
+  <section id="center">
+    <div class="panel">
+      <h2>CURRENT TASK</h2>
+      <textarea id="task-input" rows="3" spellcheck="false"
+        placeholder="Describe a development task, e.g. &quot;add a --json flag to the status command and cover it with tests&quot;"></textarea>
+      <div class="row space">
+        <div class="row">
+          <button id="btn-run" class="primary">EXECUTE TASK</button>
+          <button id="btn-cancel" class="danger hidden">CANCEL</button>
+        </div>
+        <span id="task-meta" class="muted small"></span>
+      </div>
+      <p id="task-error" class="err"></p>
+    </div>
+
+    <div class="panel">
+      <h2>WORKFLOW</h2>
+      <ol id="stage-rail" class="rail"></ol>
+    </div>
+
+    <div class="panel grow">
+      <h2>AGENT ACTIVITY <span id="activity-count" class="muted small"></span>
+        <label class="toggle"><input type="checkbox" id="show-reasoning"> reasoning</label></h2>
+      <div id="activity" class="stream"></div>
+    </div>
+
+    <div class="panel" id="plan-panel">
+      <h2>PLAN</h2>
+      <ol id="plan" class="plan muted">No plan yet.</ol>
+    </div>
+
+    <div class="panel" id="output-panel">
+      <h2>STAGE OUTPUT</h2>
+      <div id="stage-output" class="prose muted">Stage output appears here as each agent finishes.</div>
+    </div>
+  </section>
+
+  <!-- RIGHT -->
+  <aside id="rightpanel">
+    <section class="panel">
+      <h2>AGENT STATUS</h2>
+      <div id="agent-status" class="kv"></div>
+    </section>
+
+    <section class="panel">
+      <h2>FILES CHANGED <span id="files-count" class="muted small"></span></h2>
+      <ul id="files" class="list files"><li class="muted">none yet</li></ul>
+    </section>
+
+    <section class="panel">
+      <h2>TESTS</h2>
+      <div id="tests" class="kv"><span class="muted">no test run yet</span></div>
+    </section>
+
+    <section class="panel grow">
+      <h2>GIT DIFF <button id="btn-refresh-diff" class="mini">REFRESH</button></h2>
+      <pre id="diff" class="diff muted">Select a project to see its diff.</pre>
+    </section>
+
+    <section class="panel">
+      <h2>COMMIT</h2>
+      <input id="commit-message" type="text" placeholder="commit message" spellcheck="false">
+      <div class="row"><button id="btn-commit" class="primary mini">CREATE COMMIT</button></div>
+      <p id="commit-status" class="small muted">Forge never pushes to a remote.</p>
+    </section>
+  </aside>
+</main>
+
+<!-- approval gate -->
+<div id="confirm-overlay" class="overlay hidden">
+  <div class="modal">
+    <h3>APPROVAL REQUIRED</h3>
+    <p class="modal-reason" id="confirm-reason"></p>
+    <pre id="confirm-command"></pre>
+    <p class="small muted">This command was classified as potentially destructive. It will not
+      run unless you approve it. Denying it tells the agent to find another way.</p>
+    <div class="row space">
+      <button id="btn-deny" class="danger">DENY</button>
+      <button id="btn-approve" class="primary">APPROVE &amp; RUN</button>
+    </div>
+  </div>
+</div>
+
+<script type="module" src="/static/js/app.js"></script>
+</body>
+</html>
