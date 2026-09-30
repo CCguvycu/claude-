@@ -1,0 +1,1008 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>I Love My Job</title>
+<meta name="description" content="A personal statement about genuinely enjoying the work. I build software, work with AI agents, and turn ideas into things that actually run." />
+<meta name="color-scheme" content="dark" />
+<meta name="theme-color" content="#07080a" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230b0d11'/%3E%3Ctext x='16' y='22' font-size='16' font-family='monospace' text-anchor='middle' fill='%234c8dff'%3E%26gt;_%3C/text%3E%3C/svg%3E" />
+<style>
+/* ── tokens ─────────────────────────────────────────────────────────── */
+:root{
+  --bg:#07080a;
+  --bg-2:#0a0c10;
+  --surface:#0d1015;
+  --surface-2:#111520;
+  --line:#1e2430;
+  --line-2:#2b3342;
+  --text:#e7eaf0;
+  --text-2:#98a1b3;
+  --text-3:#606a7d;
+  --blue:#4c8dff;
+  --green:#3ddc97;
+  --purple:#a97bff;
+  --amber:#ffc46b;
+  --mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,"Liberation Mono",monospace;
+  --sans:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  --r:14px;
+  --pad:clamp(20px,5vw,40px);
+  --maxw:1120px;
+  --ease:cubic-bezier(.22,.68,0,1);
+}
+
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{
+  margin:0;background:var(--bg);color:var(--text);
+  font-family:var(--sans);font-size:17px;line-height:1.65;
+  -webkit-font-smoothing:antialiased;overflow-x:hidden;
+}
+body::before{
+  content:"";position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:
+    radial-gradient(900px 600px at 12% -5%,rgba(76,141,255,.10),transparent 70%),
+    radial-gradient(800px 700px at 92% 12%,rgba(169,123,255,.09),transparent 70%),
+    radial-gradient(900px 700px at 50% 108%,rgba(61,220,151,.07),transparent 70%);
+}
+body::after{
+  content:"";position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.35;
+  background-image:linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px);
+  background-size:64px 64px;
+  mask-image:radial-gradient(ellipse 130% 90% at 50% 0%,#000 25%,transparent 75%);
+  -webkit-mask-image:radial-gradient(ellipse 130% 90% at 50% 0%,#000 25%,transparent 75%);
+}
+main,header,footer{position:relative;z-index:1}
+img,svg{display:block;max-width:100%}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--blue);outline-offset:3px;border-radius:4px}
+::selection{background:rgba(76,141,255,.3)}
+
+/* ── typography ─────────────────────────────────────────────────────── */
+h1,h2,h3{margin:0;line-height:1.02;letter-spacing:-.03em;font-weight:760}
+.h-mega{font-size:clamp(3rem,13vw,10rem)}
+.h-xl{font-size:clamp(2.1rem,6.4vw,4.6rem);line-height:1.04}
+.h-lg{font-size:clamp(1.7rem,4.2vw,3rem)}
+.h-md{font-size:clamp(1.15rem,2.2vw,1.5rem);letter-spacing:-.02em}
+p{margin:0 0 1rem}
+.lead{font-size:clamp(1.05rem,1.9vw,1.3rem);color:var(--text-2);max-width:62ch}
+.body{color:var(--text-2);max-width:66ch}
+.tag{
+  font-family:var(--mono);font-size:.74rem;letter-spacing:.22em;text-transform:uppercase;
+  color:var(--text-3);display:inline-flex;align-items:center;gap:.6em;margin:0 0 1.1rem;
+}
+.tag::before{content:"";width:22px;height:1px;background:var(--line-2)}
+.g-blue{color:var(--blue)}.g-green{color:var(--green)}.g-purple{color:var(--purple)}
+.grad{
+  background:linear-gradient(96deg,#fff 8%,var(--blue) 46%,var(--purple) 74%,var(--green) 98%);
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+}
+.mono{font-family:var(--mono)}
+.skip{position:absolute;left:-9999px;top:0}
+.skip:focus{left:12px;top:12px;z-index:100;background:var(--surface-2);border:1px solid var(--line-2);padding:10px 14px;border-radius:8px}
+
+/* ── layout ─────────────────────────────────────────────────────────── */
+.wrap{width:100%;max-width:var(--maxw);margin:0 auto;padding:0 var(--pad)}
+section{padding:clamp(80px,12vw,148px) 0;position:relative}
+.sep{height:1px;background:linear-gradient(90deg,transparent,var(--line),transparent)}
+
+/* ── progress + nav ─────────────────────────────────────────────────── */
+#progress{
+  position:fixed;top:0;left:0;height:2px;z-index:60;width:100%;
+  transform:scaleX(0);transform-origin:0 50%;
+  background:linear-gradient(90deg,var(--blue),var(--purple),var(--green));
+}
+header{
+  position:sticky;top:0;z-index:50;
+  backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  background:rgba(7,8,10,.72);border-bottom:1px solid transparent;
+  transition:border-color .3s,background .3s;
+}
+header.stuck{border-bottom-color:var(--line);background:rgba(7,8,10,.88)}
+.nav{display:flex;align-items:center;gap:16px;height:60px}
+.brand{
+  font-family:var(--mono);font-size:.84rem;letter-spacing:.06em;text-decoration:none;
+  display:flex;align-items:center;gap:8px;color:var(--text);flex:0 0 auto;
+}
+.dot{width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 10px var(--green);animation:pulse 2.6s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
+.links{display:flex;gap:2px;margin-left:auto;align-items:center}
+.links a{
+  font-family:var(--mono);font-size:.74rem;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--text-3);text-decoration:none;padding:8px 10px;border-radius:7px;
+  transition:color .18s,background .18s;
+}
+.links a:hover{color:var(--text)}
+.links a[aria-current="true"]{color:var(--text);background:var(--surface-2)}
+#menu-btn{
+  display:none;margin-left:auto;background:var(--surface);color:var(--text);
+  border:1px solid var(--line);border-radius:9px;padding:8px 12px;
+  font-family:var(--mono);font-size:.74rem;letter-spacing:.1em;cursor:pointer;
+}
+@media (max-width:860px){
+  #menu-btn{display:block}
+  .links{
+    position:absolute;top:60px;left:0;right:0;flex-direction:column;gap:0;margin:0;
+    background:rgba(8,10,13,.98);border-top:1px solid var(--line);border-bottom:1px solid var(--line);
+    padding:8px;display:none;
+  }
+  .links.open{display:flex}
+  .links a{padding:13px 12px;font-size:.8rem;width:100%}
+}
+
+/* ── hero ───────────────────────────────────────────────────────────── */
+#top{min-height:min(100svh,940px);display:flex;align-items:center;padding-top:clamp(40px,8vw,80px);overflow:hidden}
+.hero-glow{
+  position:absolute;width:min(640px,110vw);aspect-ratio:1;border-radius:50%;pointer-events:none;
+  background:radial-gradient(circle,rgba(76,141,255,.13),transparent 62%);
+  left:var(--mx,50%);top:var(--my,40%);transform:translate(-50%,-50%);
+  transition:left .5s var(--ease),top .5s var(--ease);
+}
+#top h1{margin-bottom:clamp(20px,3.4vw,30px)}
+.caret{
+  display:inline-block;width:.16em;height:.82em;margin-left:.06em;vertical-align:-.04em;
+  background:var(--blue);box-shadow:0 0 22px rgba(76,141,255,.7);animation:blink 1.15s steps(1) infinite;
+}
+@keyframes blink{50%{opacity:0}}
+.hero-quote{
+  border-left:2px solid var(--line-2);padding-left:18px;margin:0 0 26px;
+  font-size:clamp(1.05rem,2vw,1.38rem);color:var(--text);max-width:60ch;
+}
+.hero-meta{
+  display:flex;flex-wrap:wrap;gap:10px;margin-top:34px;
+  font-family:var(--mono);font-size:.74rem;letter-spacing:.1em;text-transform:uppercase;color:var(--text-3);
+}
+.chip{border:1px solid var(--line);background:var(--surface);border-radius:100px;padding:7px 13px;display:flex;gap:8px;align-items:center}
+.chip b{color:var(--text-2);font-weight:500}
+.cta{display:flex;flex-wrap:wrap;gap:12px;margin-top:30px}
+.btn{
+  font-family:var(--mono);font-size:.8rem;letter-spacing:.08em;text-transform:uppercase;
+  text-decoration:none;cursor:pointer;padding:13px 20px;border-radius:10px;
+  border:1px solid var(--line-2);background:var(--surface-2);color:var(--text);
+  transition:transform .18s var(--ease),border-color .18s,background .18s,box-shadow .18s;
+  display:inline-flex;align-items:center;gap:9px;
+}
+.btn:hover{transform:translateY(-2px);border-color:var(--blue);box-shadow:0 8px 30px -14px rgba(76,141,255,.7)}
+.btn.primary{background:linear-gradient(180deg,rgba(76,141,255,.22),rgba(76,141,255,.09));border-color:rgba(76,141,255,.45)}
+.scroll-hint{
+  margin-top:clamp(36px,6vw,64px);font-family:var(--mono);font-size:.7rem;letter-spacing:.2em;
+  color:var(--text-3);text-transform:uppercase;display:flex;align-items:center;gap:10px;
+}
+.scroll-hint span{display:block;width:1px;height:26px;background:linear-gradient(var(--line-2),transparent);animation:drop 2.2s infinite}
+@keyframes drop{0%{transform:scaleY(.2);transform-origin:top}60%{transform:scaleY(1);transform-origin:top}100%{transform:scaleY(.2);transform-origin:top}}
+
+/* ── reveal ─────────────────────────────────────────────────────────── */
+[data-reveal]{opacity:0;transform:translateY(22px);transition:opacity .7s var(--ease),transform .7s var(--ease)}
+[data-reveal].in{opacity:1;transform:none}
+
+/* ── cards / grids ──────────────────────────────────────────────────── */
+.grid{display:grid;gap:14px}
+.g2{grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr))}
+.g3{grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr))}
+.panel{
+  background:linear-gradient(180deg,var(--surface),var(--bg-2));
+  border:1px solid var(--line);border-radius:var(--r);padding:clamp(18px,2.4vw,26px);
+}
+.do-item{
+  display:flex;gap:12px;align-items:baseline;border:1px solid var(--line);border-radius:11px;
+  background:var(--surface);padding:13px 15px;transition:border-color .2s,transform .2s var(--ease),background .2s;
+}
+.do-item:hover{border-color:var(--line-2);transform:translateY(-2px);background:var(--surface-2)}
+.do-item i{font-family:var(--mono);font-style:normal;font-size:.7rem;color:var(--text-3);letter-spacing:.06em}
+.do-item b{font-weight:560;font-size:.98rem}
+
+/* interactive love-cards */
+.card{
+  text-align:left;width:100%;cursor:pointer;color:var(--text);
+  background:linear-gradient(180deg,var(--surface),var(--bg-2));
+  border:1px solid var(--line);border-radius:var(--r);padding:22px;
+  font:inherit;position:relative;overflow:hidden;
+  transition:transform .28s var(--ease),border-color .24s,box-shadow .28s;
+}
+.card::before{
+  content:"";position:absolute;inset:0;opacity:0;transition:opacity .3s;
+  background:radial-gradient(420px circle at var(--cx,50%) var(--cy,0%),rgba(76,141,255,.14),transparent 62%);
+}
+.card:hover{transform:translateY(-4px);border-color:var(--line-2);box-shadow:0 22px 50px -32px rgba(0,0,0,.9)}
+.card:hover::before{opacity:1}
+.card[aria-expanded="true"]{border-color:rgba(76,141,255,.5)}
+.card .idx{font-family:var(--mono);font-size:.7rem;color:var(--text-3);letter-spacing:.14em}
+.card h3{margin:10px 0 8px;font-size:1.45rem}
+.card .sub{color:var(--text-2);font-size:.97rem;margin:0}
+.card .more{
+  display:grid;grid-template-rows:0fr;transition:grid-template-rows .34s var(--ease);
+}
+.card[aria-expanded="true"] .more{grid-template-rows:1fr}
+.card .more>div{overflow:hidden}
+.card .more p{
+  margin:14px 0 0;padding-top:14px;border-top:1px dashed var(--line-2);
+  font-family:var(--mono);font-size:.84rem;color:var(--text-3);line-height:1.6;
+}
+.card .hintline{
+  margin-top:16px;font-family:var(--mono);font-size:.68rem;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--text-3);display:flex;gap:8px;align-items:center;
+}
+.card .hintline::after{content:"+";color:var(--blue);transition:transform .3s var(--ease)}
+.card[aria-expanded="true"] .hintline::after{transform:rotate(45deg)}
+
+/* ── cycle ring (section 1) ─────────────────────────────────────────── */
+.cycle{
+  position:relative;width:100%;max-width:400px;aspect-ratio:1/1;margin:0 auto;
+  display:grid;place-items:center;
+}
+.cycle svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+.ring-track{fill:none;stroke:var(--line);stroke-width:1}
+.ring-live{
+  fill:none;stroke:url(#ringgrad);stroke-width:2;stroke-linecap:round;
+  transition:stroke-dashoffset .6s var(--ease);
+}
+.node{
+  position:absolute;top:50%;left:50%;
+  transform:translate(-50%,-50%) rotate(var(--a)) translate(var(--rad,150px)) rotate(calc(-1 * var(--a)));
+  font-family:var(--mono);font-size:.7rem;letter-spacing:.1em;white-space:nowrap;
+  border:1px solid var(--line);background:var(--bg-2);color:var(--text-3);
+  padding:8px 11px;border-radius:100px;transition:all .34s var(--ease);
+}
+.node[data-on="1"]{
+  color:var(--text);border-color:rgba(76,141,255,.6);background:var(--surface-2);
+  box-shadow:0 0 0 4px rgba(76,141,255,.09),0 0 26px -6px rgba(76,141,255,.6);
+  transform:translate(-50%,-50%) rotate(var(--a)) translate(var(--rad,150px)) rotate(calc(-1 * var(--a))) scale(1.1);
+}
+.cycle-core{text-align:center;max-width:56%}
+.cycle-core .step{
+  font-family:var(--mono);font-size:clamp(1.05rem,3.4vw,1.55rem);letter-spacing:.02em;
+  min-height:1.6em;color:var(--text);
+}
+.cycle-core .note{font-size:.82rem;color:var(--text-3);margin:6px 0 0;min-height:2.6em;line-height:1.5}
+.cycle-core .loop{font-family:var(--mono);font-size:.66rem;letter-spacing:.2em;color:var(--green);opacity:0;transition:opacity .3s}
+.cycle-core .loop[data-on="1"]{opacity:1}
+@media (max-width:600px){
+  .cycle{aspect-ratio:auto;max-width:none;display:flex;flex-direction:column;align-items:stretch}
+  .cycle svg{display:none}
+  .node{position:static;inset:auto;width:100%;transform:none!important;display:flex;justify-content:space-between;align-items:center;border-radius:9px;margin:0 0 7px;padding:12px 14px;font-size:.74rem}
+  .node[data-on="1"]{transform:none}
+  .cycle-core{order:-1;max-width:none;text-align:left;margin:0 0 18px;padding-bottom:18px;border-bottom:1px solid var(--line)}
+}
+.flow-line{
+  display:flex;flex-wrap:wrap;gap:8px;align-items:center;font-family:var(--mono);
+  font-size:.72rem;letter-spacing:.12em;color:var(--text-3);margin-top:22px;
+}
+.flow-line b{color:var(--text-2);font-weight:500}
+
+/* ── project sections ───────────────────────────────────────────────── */
+.proj-title{font-size:clamp(2.6rem,11vw,7.4rem);letter-spacing:-.05em;line-height:.9}
+.pill-row{display:flex;flex-wrap:wrap;gap:9px;margin-top:20px}
+.pill{
+  font-family:var(--mono);font-size:.72rem;letter-spacing:.08em;color:var(--text-2);
+  border:1px solid var(--line);background:var(--surface);border-radius:100px;padding:8px 13px;
+  transition:border-color .2s,color .2s,transform .2s var(--ease);
+}
+.pill:hover{border-color:var(--blue);color:var(--text);transform:translateY(-2px)}
+.stack{display:grid;gap:12px}
+.kv{border:1px solid var(--line);border-radius:11px;background:var(--surface);padding:15px 17px}
+.kv b{display:block;font-family:var(--mono);font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--blue);margin-bottom:6px}
+.kv span{color:var(--text-2);font-size:.95rem}
+.kv.green b{color:var(--green)}
+.kv.purple b{color:var(--purple)}
+
+/* ── terminal ───────────────────────────────────────────────────────── */
+.term{
+  border:1px solid var(--line);border-radius:12px;overflow:hidden;
+  background:#070809;box-shadow:0 30px 70px -40px rgba(0,0,0,1);
+}
+.term-bar{
+  display:flex;align-items:center;gap:8px;padding:11px 14px;
+  border-bottom:1px solid var(--line);background:var(--surface);
+}
+.term-bar i{width:9px;height:9px;border-radius:50%;background:var(--line-2);display:block}
+.term-bar i:nth-child(1){background:#ff5f57}.term-bar i:nth-child(2){background:#febc2e}.term-bar i:nth-child(3){background:#28c840}
+.term-bar span{font-family:var(--mono);font-size:.72rem;color:var(--text-3);margin-left:6px}
+.term-bar button{
+  margin-left:auto;background:transparent;border:1px solid var(--line-2);color:var(--text-2);
+  font-family:var(--mono);font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;
+  padding:5px 10px;border-radius:7px;cursor:pointer;transition:color .2s,border-color .2s;
+}
+.term-bar button:hover{color:var(--text);border-color:var(--blue)}
+.term-body{
+  font-family:var(--mono);font-size:clamp(.78rem,1.6vw,.9rem);line-height:1.95;
+  padding:18px;min-height:250px;color:var(--text-2);
+}
+.term-body .l{display:block;white-space:pre-wrap;word-break:break-word}
+.term-body .l::before{content:"> ";color:var(--text-3)}
+.term-body .l.ok{color:var(--green)}
+.term-body .l.ok::before{content:"✓ ";color:var(--green)}
+.term-body .l.warn{color:var(--amber)}
+.term-body .cur{display:inline-block;width:.55em;height:1em;background:var(--green);vertical-align:-.13em;animation:blink 1.05s steps(1) infinite}
+
+/* ── agent loop diagram ─────────────────────────────────────────────── */
+.loop{display:grid;gap:0;justify-items:stretch;position:relative}
+.loop-step{
+  display:flex;align-items:center;gap:14px;border:1px solid var(--line);border-radius:11px;
+  background:var(--surface);padding:13px 16px;transition:all .3s var(--ease);
+}
+.loop-step em{
+  font-family:var(--mono);font-style:normal;font-size:.68rem;color:var(--text-3);
+  min-width:2.2em;letter-spacing:.06em;
+}
+.loop-step b{font-family:var(--mono);font-size:.92rem;letter-spacing:.09em;font-weight:500}
+.loop-step small{margin-left:auto;color:var(--text-3);font-size:.76rem;font-family:var(--mono);text-align:right}
+.loop-step[data-on="1"]{
+  border-color:rgba(169,123,255,.55);background:var(--surface-2);
+  box-shadow:0 0 0 4px rgba(169,123,255,.08);transform:translateX(5px);
+}
+.loop-step[data-on="1"] b{color:var(--purple)}
+.arrow{height:22px;display:grid;place-items:center;color:var(--text-3);font-family:var(--mono);font-size:.9rem;opacity:.7}
+.loop-back{
+  margin-top:12px;border:1px dashed var(--line-2);border-radius:11px;padding:11px 16px;
+  font-family:var(--mono);font-size:.72rem;letter-spacing:.1em;color:var(--green);text-align:center;
+}
+
+/* ── reveal-on-click (real job) ─────────────────────────────────────── */
+.quoted{
+  font-size:clamp(1.8rem,6.6vw,4.2rem);letter-spacing:-.035em;line-height:1.04;font-weight:760;
+  color:var(--text-3);
+}
+.answer{
+  display:grid;grid-template-rows:0fr;transition:grid-template-rows .5s var(--ease);
+}
+.answer.open{grid-template-rows:1fr}
+.answer>div{overflow:hidden}
+
+/* ── perks ──────────────────────────────────────────────────────────── */
+.perk{
+  border:1px solid var(--line);border-radius:var(--r);padding:22px;
+  background:linear-gradient(180deg,var(--surface),var(--bg-2));
+  transition:border-color .22s,transform .22s var(--ease);
+}
+.perk:hover{border-color:var(--line-2);transform:translateY(-3px)}
+.perk .big{font-size:clamp(1.6rem,4vw,2.3rem);font-weight:760;letter-spacing:-.03em;line-height:1.1}
+.perk .lbl{font-family:var(--mono);font-size:.7rem;letter-spacing:.16em;text-transform:uppercase;color:var(--text-3);margin-top:10px}
+.perk.pay{border-color:rgba(61,220,151,.3);background:linear-gradient(180deg,rgba(61,220,151,.07),var(--bg-2))}
+.perk.pay .big{color:var(--green)}
+
+/* ── closing ────────────────────────────────────────────────────────── */
+#end{min-height:100svh;display:flex;align-items:center;text-align:center;overflow:hidden}
+#end .lines p{font-family:var(--mono);color:var(--text-2);margin:.35rem 0;font-size:clamp(.86rem,1.9vw,1.05rem)}
+.words{
+  display:flex;flex-wrap:wrap;gap:9px;justify-content:center;margin:clamp(30px,5vw,48px) 0;
+}
+.words span{
+  font-family:var(--mono);font-size:.74rem;letter-spacing:.16em;padding:9px 14px;
+  border:1px solid var(--line);border-radius:100px;color:var(--text-3);background:var(--surface);
+  transition:color .2s,border-color .2s,transform .2s var(--ease);
+}
+.words span:hover{color:var(--text);border-color:var(--purple);transform:translateY(-3px)}
+footer{border-top:1px solid var(--line);padding:26px 0 40px}
+.foot{
+  display:flex;flex-wrap:wrap;gap:14px;align-items:center;justify-content:space-between;
+  font-family:var(--mono);font-size:.72rem;color:var(--text-3);letter-spacing:.06em;
+}
+.foot a{color:var(--text-2);text-decoration:none;border-bottom:1px solid var(--line-2)}
+.foot a:hover{color:var(--blue)}
+.top-link{background:none;border:1px solid var(--line);color:var(--text-2);font-family:var(--mono);font-size:.7rem;letter-spacing:.12em;padding:8px 13px;border-radius:8px;cursor:pointer}
+.top-link:hover{border-color:var(--blue);color:var(--text)}
+
+@media (max-width:620px){ .hide-sm{display:none} }
+
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important}
+  [data-reveal]{opacity:1;transform:none}
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#top">Skip to content</a>
+<div id="progress" aria-hidden="true"></div>
+
+<header id="site-header">
+  <div class="wrap nav">
+    <a class="brand" href="#top"><span class="dot" aria-hidden="true"></span>i-love-my-job<span class="mono g-blue">.sh</span></a>
+    <button id="menu-btn" aria-expanded="false" aria-controls="nav-links">Menu</button>
+    <nav class="links" id="nav-links" aria-label="Sections">
+      <a href="#build">Build</a>
+      <a href="#starfall">Starfall</a>
+      <a href="#hmov">HMOV</a>
+      <a href="#love">The Part I Love</a>
+      <a href="#agent">Agent</a>
+      <a href="#perks">Perks</a>
+      <a href="#why">Why</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+
+<!-- ── HERO ───────────────────────────────────────────────────────── -->
+<section id="top">
+  <div class="hero-glow" id="hero-glow" aria-hidden="true"></div>
+  <div class="wrap">
+    <p class="tag">status: employed &amp; genuinely happy about it</p>
+    <h1 class="h-mega"><span class="grad">I LOVE MY JOB.</span><span class="caret" aria-hidden="true"></span></h1>
+    <blockquote class="hero-quote">“Most people spend their lives complaining about work. I get paid to do something I'd probably be doing anyway.”</blockquote>
+    <p class="lead">I build software, work with AI agents, experiment with systems, and turn ideas into things that actually work.</p>
+    <div class="cta">
+      <a class="btn primary" href="#build">See what I actually do <span aria-hidden="true">↓</span></a>
+      <a class="btn" href="#realjob">“Get a real job”</a>
+    </div>
+    <div class="hero-meta">
+      <span class="chip"><span class="g-blue">◆</span><b>Starfall</b></span>
+      <span class="chip"><span class="g-purple">◆</span><b>HMOV</b></span>
+      <span class="chip"><span class="g-green">◆</span><b>AI agents</b></span>
+      <span class="chip"><b>working from home</b></span>
+    </div>
+    <p class="scroll-hint"><span aria-hidden="true"></span>scroll</p>
+  </div>
+</section>
+
+<div class="sep"></div>
+
+<!-- ── 1. WHAT I ACTUALLY GET TO DO ───────────────────────────────── -->
+<section id="build">
+  <div class="wrap">
+    <div data-reveal>
+      <p class="tag">section 01 — what I actually get to do</p>
+      <h2 class="h-xl">I Get To Build&nbsp;Things.</h2>
+      <p class="lead" style="margin-top:22px">
+        The job is not meetings about building things. It's the building. I write code, put applications
+        together, hand work to AI agents, try ideas that might not go anywhere, break what I made,
+        work out why, fix it, and ship it. Then I do it again.
+      </p>
+    </div>
+
+    <div class="grid g2" style="margin-top:clamp(36px,5vw,60px);align-items:start">
+      <div class="panel" data-reveal>
+        <p class="tag" style="margin-bottom:18px">the actual work</p>
+        <div class="grid" style="gap:9px" id="do-list"></div>
+      </div>
+
+      <div class="panel" data-reveal style="padding-top:clamp(22px,3vw,32px)">
+        <p class="tag" style="margin-bottom:8px">the loop</p>
+        <div class="cycle" id="cycle" role="img" aria-label="Development cycle: idea, build, break, fix, improve, ship, then a new idea.">
+          <svg viewBox="0 0 200 200" aria-hidden="true">
+            <defs>
+              <linearGradient id="ringgrad" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%" stop-color="#4c8dff"/><stop offset="60%" stop-color="#a97bff"/><stop offset="100%" stop-color="#3ddc97"/>
+              </linearGradient>
+            </defs>
+            <circle class="ring-track" cx="100" cy="100" r="86"/>
+            <circle class="ring-live" id="ring-live" cx="100" cy="100" r="86" transform="rotate(-90 100 100)"/>
+          </svg>
+          <div class="cycle-core">
+            <div class="step mono" id="cycle-step" aria-live="polite">IDEA</div>
+            <p class="note" id="cycle-note">Something I want to exist.</p>
+            <div class="loop" id="cycle-loop" data-on="0">↻ and again</div>
+          </div>
+        </div>
+        <p class="flow-line" aria-hidden="true">
+          <b>IDEA</b>→<b>BUILD</b>→<b>BREAK</b>→<b>FIX</b>→<b>IMPROVE</b>→<b>SHIP</b>→<span class="g-green">NEW IDEA</span>
+        </p>
+        <p class="body" style="margin:16px 0 0;font-size:.95rem">
+          The cycle isn't the cost of the job. The cycle <em>is</em> the job, and it's the part I like.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="sep"></div>
+
+<!-- ── 2. STARFALL ────────────────────────────────────────────────── -->
+<section id="starfall">
+  <div class="wrap">
+    <div data-reveal>
+      <p class="tag">section 02 — project</p>
+      <h2 class="proj-title grad">STARFALL</h2>
+    </div>
+    <div class="grid g2" style="margin-top:clamp(28px,4vw,44px);align-items:start">
+      <div data-reveal>
+        <p class="lead">
+          One of the things I actually work on. Not a line on a CV I wrote once and never touched again —
+          something I open, change, break and improve.
+        </p>
+        <p class="body">
+          Most of what I do here is the unglamorous, good part: building features, watching them fail in
+          ways I didn't predict, working out what I got wrong, and making the next version better than
+          the one before it.
+        </p>
+        <div class="pill-row">
+          <span class="pill">AI-assisted development</span>
+          <span class="pill">Application development</span>
+          <span class="pill">Experimentation</span>
+          <span class="pill">Continuous iteration</span>
+        </div>
+      </div>
+      <div class="stack" data-reveal>
+        <div class="kv"><b>AI-assisted development</b><span>Agents are part of how the work gets written, reviewed and re-written.</span></div>
+        <div class="kv purple"><b>Application development</b><span>Actual software that people other than me end up using.</span></div>
+        <div class="kv green"><b>Experimentation</b><span>Trying the version that probably won't work, because sometimes it does.</span></div>
+        <div class="kv"><b>Continuous iteration</b><span>It's never finished. That's a feature, not a complaint.</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="sep"></div>
+
+<!-- ── 3. HMOV ────────────────────────────────────────────────────── -->
+<section id="hmov">
+  <div class="wrap">
+    <div data-reveal>
+      <p class="tag">section 03 — project</p>
+      <h2 class="proj-title grad">HMOV</h2>
+    </div>
+    <div class="grid g2" style="margin-top:clamp(28px,4vw,44px);align-items:start">
+      <div data-reveal>
+        <p class="lead">
+          The other side of the work. More systems, more care, less room to be sloppy — the kind of thing
+          where “it works on my machine” isn't an answer.
+        </p>
+        <p class="body">
+          I like this one for a slightly different reason: it has to hold up. That constraint makes you
+          think properly about how things fail, who they fail for, and what happens next. It has a
+          purpose, so getting it right matters.
+        </p>
+        <div class="pill-row">
+          <span class="pill">Systems</span><span class="pill">Security</span><span class="pill">Engineering</span>
+          <span class="pill">Reliability</span><span class="pill">Experimentation</span><span class="pill">Purpose</span>
+        </div>
+      </div>
+      <div class="stack" data-reveal>
+        <div class="kv purple"><b>Systems</b><span>Pieces that have to work together, not in isolation.</span></div>
+        <div class="kv"><b>Security</b><span>Thinking about how something breaks on purpose, not just by accident.</span></div>
+        <div class="kv green"><b>Engineering</b><span>Decisions you have to be able to defend later.</span></div>
+        <div class="kv"><b>Reliability</b><span>Working once is easy. Working every time is the job.</span></div>
+        <div class="kv purple"><b>Experimentation</b><span>Still room to try things — carefully.</span></div>
+        <div class="kv green"><b>Built for a reason</b><span>It exists because something needed to exist.</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="sep"></div>
+
+<!-- ── 4. THE PART I ACTUALLY LOVE ────────────────────────────────── -->
+<section id="love">
+  <div class="wrap">
+    <div data-reveal>
+      <p class="tag">section 04 — the honest bit</p>
+      <h2 class="h-xl">It's Not Really About<br class="hide-sm" /> The&nbsp;Pay.</h2>
+      <p class="lead" style="margin-top:22px">“The best part is that I actually enjoy doing the work.”</p>
+      <p class="body">Six things I'd still be doing on a weekend. Tap any of them.</p>
+    </div>
+    <div class="grid g3" id="love-cards" style="margin-top:clamp(30px,4vw,46px)"></div>
+  </div>
+</section>
+
+<div class="sep"></div>
+
+<!-- ── 5. AI AGENT WORKFLOW ───────────────────────────────────────── -->
+<section id="agent">
+  <div class="wrap">
+    <div data-reveal>
+      <p class="tag">section 05 — workflow</p>
+      <h2 class="h-xl">My Coworker Is<br class="hide-sm" /> An AI&nbsp;Agent.</h2>
+      <p class="lead" style="margin-top:22px">
+        It never asks about my weekend and it never gets tired, which is genuinely useful.
+        It also confidently does the wrong thing sometimes, which is why I'm still here.
+      </p>
+    </div>
+
+    <div class="grid g2" style="margin-top:clamp(34px,4.5vw,56px);align-items:start">
+      <div class="panel" data-reveal>
+        <p class="tag" style="margin-bottom:16px">the development loop</p>
+        <div class="loop" id="agent-loop"></div>
+        <p class="loop-back">↻ back to ME — with a better idea than last time</p>
+      </div>
+
+      <div data-reveal>
+        <div class="term">
+          <div class="term-bar">
+            <i aria-hidden="true"></i><i aria-hidden="true"></i><i aria-hidden="true"></i>
+            <span>agent — session</span>
+            <button id="term-replay" type="button">replay</button>
+          </div>
+          <div class="term-body" id="term" aria-live="polite" aria-atomic="false"></div>
+        </div>
+        <p class="body" style="margin-top:20px">
+          An agent is a tool in the workflow, not a replacement for knowing what you're doing.
+          It writes fast; I still decide what should exist, whether the tests actually prove anything,
+          and which of its confident suggestions to throw away.
+        </p>
+        <p class="body" style="margin-bottom:0">
+          The interesting part is that it moves the work up a level. Less typing, more thinking about
+          what to build — which is the bit I liked in the first place.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="sep"></div>
+
+<!-- ── 6. WHY DON'T YOU GET A REAL JOB ────────────────────────────── -->
+<section id="realjob">
+  <div class="wrap">
+    <div data-reveal>
+      <p class="tag">section 06 — frequently asked</p>
+      <p class="quoted">“Why don't you get<br /> a real job?”</p>
+      <div style="margin-top:clamp(24px,4vw,40px)">
+        <button class="btn primary" id="reveal-btn" aria-expanded="false" aria-controls="real-answer">Answer <span aria-hidden="true">→</span></button>
+      </div>
+      <div class="answer" id="real-answer">
+        <div>
+          <h3 class="h-lg" style="margin:clamp(26px,4vw,40px) 0 18px">This is my real job.</h3>
+          <p class="lead">
+            “I get to stay home, build software, use AI agents, get the tools I need, and get paid to do
+            something I genuinely enjoy.”
+          </p>
+          <p class="lead" style="color:var(--text)">“Why would I want to hate going to work?”</p>
+          <p class="body" style="margin-top:18px">
+            No shade to anyone with a normal job — most jobs are normal, that's fine, and plenty of people
+            are perfectly happy in them. The joke is only that I got lucky and landed on something I'd
+            have been doing anyway.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="sep"></div>
+
+<!-- ── 7. PERKS ───────────────────────────────────────────────────── -->
+<section id="perks">
+  <div class="wrap">
+    <div data-reveal>
+      <p class="tag">section 07 — secondary, but still</p>
+      <h2 class="h-xl">And Yeah, The Deal<br class="hide-sm" /> Is Pretty&nbsp;Good.</h2>
+    </div>
+    <div class="grid g3" style="margin-top:clamp(30px,4vw,46px)">
+      <div class="perk pay" data-reveal><div class="big">£60 <span class="mono" style="font-size:.5em;color:var(--text-3)">/ month</span></div><div class="lbl">current pay</div></div>
+      <div class="perk" data-reveal><div class="big">Work from home</div><div class="lbl">no commute</div></div>
+      <div class="perk" data-reveal><div class="big">Tools provided</div><div class="lbl">technology I need for the work</div></div>
+      <div class="perk" data-reveal><div class="big">AI-assisted</div><div class="lbl">part of my normal workflow</div></div>
+      <div class="perk" data-reveal><div class="big">Flexible</div><div class="lbl">focused on actually getting the work done</div></div>
+      <div class="perk" data-reveal style="display:grid;align-content:center">
+        <p class="body" style="margin:0;font-size:.95rem">
+          It's not a fortune and I'm not pretending it is. The point is that even the practical side of
+          this is pretty fucking good.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="sep"></div>
+
+<!-- ── 8. I DON'T AGREE WITH EVERYTHING ───────────────────────────── -->
+<section id="questions">
+  <div class="wrap">
+    <div data-reveal style="max-width:78ch">
+      <p class="tag">section 08 — not a fan club</p>
+      <h2 class="h-xl">Do I Question<br class="hide-sm" /> Decisions? Obviously.</h2>
+      <p class="lead" style="margin-top:24px">
+        “Do I sometimes look at a decision and think, ‘What the fuck are we doing?’ Absolutely.”
+      </p>
+      <p class="lead" style="color:var(--text)">“That doesn't change the fact that I love the work.”</p>
+      <div class="grid g2" style="margin-top:clamp(26px,4vw,40px)">
+        <div class="panel" data-reveal>
+          <p class="tag" style="margin-bottom:12px">what disagreeing looks like</p>
+          <p class="body" style="margin:0;font-size:.97rem">
+            Saying so. Explaining why. Sometimes being wrong about it and finding out later that the
+            original call was better than mine.
+          </p>
+        </div>
+        <div class="panel" data-reveal>
+          <p class="tag" style="margin-bottom:12px">what it doesn't look like</p>
+          <p class="body" style="margin:0;font-size:.97rem">
+            Quietly resenting it, or pretending every decision is brilliant. Liking your job and agreeing
+            with everything aren't the same thing.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="sep"></div>
+
+<!-- ── 9. WHY THIS MATTERS ────────────────────────────────────────── -->
+<section id="why">
+  <div class="wrap">
+    <div data-reveal style="max-width:20ch">
+      <p class="tag" style="max-width:none">section 09 — the point</p>
+      <h2 class="h-xl" style="color:var(--text-3)">Most People Want To Escape Work.</h2>
+      <h2 class="h-xl grad" style="margin-top:clamp(14px,2.4vw,26px)">I Want To Keep Building.</h2>
+    </div>
+    <div data-reveal style="margin-top:clamp(30px,4vw,48px);max-width:66ch">
+      <p class="lead">
+        “Coding was already something I enjoyed before it became work. The difference now is that I get to
+        build things that matter to other people too.”
+      </p>
+      <p class="body">
+        That's the whole thing. I'm not chasing a title and I'm not counting down to a weekend. The work
+        is the same thing I'd be doing in my own time, except now it has a reason to exist outside my
+        own machine, and someone else gets something out of it.
+      </p>
+      <p class="body" style="margin-bottom:0">
+        I know that's not normal, and I know it might not last forever. Right now it's true, and I'm
+        fucking grateful for it.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ── CLOSING ────────────────────────────────────────────────────── -->
+<section id="end">
+  <div class="wrap">
+    <div data-reveal>
+      <h2 class="h-mega grad">I LOVE MY JOB.</h2>
+      <div class="lines" style="margin-top:clamp(22px,3.4vw,34px)">
+        <p>Not because it's easy.</p>
+        <p>Not because everything goes perfectly.</p>
+        <p style="color:var(--text)">Because I get to build shit.</p>
+      </div>
+      <div class="words" id="words" aria-hidden="true"></div>
+      <p class="lead" style="margin:0 auto;text-align:center;color:var(--text)">“And somehow, I get paid for it.”</p>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap foot">
+    <span>&gt; built at home, on purpose</span>
+    <span>starfall · hmov · ai agents</span>
+    <button class="top-link" id="to-top" type="button">↑ back to top</button>
+  </div>
+</footer>
+
+<script>
+(() => {
+  "use strict";
+  const $ = (s, r = document) => r.querySelector(s);
+  const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+  const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  /* ── data ─────────────────────────────────────────────────────── */
+  const DO_ITEMS = [
+    "Writing code", "Building applications", "Working with AI agents",
+    "Experimenting with ideas", "Solving technical problems", "Breaking things",
+    "Fixing things", "Iterating", "Shipping working software"
+  ];
+  const CYCLE = [
+    ["IDEA",    "Something I want to exist."],
+    ["BUILD",   "Make the smallest version that runs."],
+    ["BREAK",   "Push it until it falls over."],
+    ["FIX",     "Find out why, then actually fix the why."],
+    ["IMPROVE", "Make it better than it needed to be."],
+    ["SHIP",    "Out of my machine, into the real world."]
+  ];
+  const LOVE = [
+    ["Building",     "Taking an idea and turning it into something real.", "Start with nothing. End with something that runs."],
+    ["Experimenting","Trying something stupid just to see if it works.",   "Most of it doesn't work. That's the point of trying it."],
+    ["Breaking",     "Finding out exactly where something falls apart.",   "You don't really understand it until you've broken it."],
+    ["Fixing",       "Making it work again.",                              "The bit where it finally goes green."],
+    ["AI",           "Using AI agents as part of the development process.","Agents do the grunt work. I still have to know what I'm asking for."],
+    ["Learning",     "Every project gives me something new to figure out.","There's always something I didn't know yesterday."]
+  ];
+  const AGENT_STEPS = [
+    ["ME",       "the one with the opinion"],
+    ["IDEA",     "what should exist"],
+    ["AI AGENT", "does the typing"],
+    ["CODE",     "written, then read properly"],
+    ["TEST",     "does it actually work?"],
+    ["BREAK",    "it usually does, somewhere"],
+    ["FIX",      "the real cause, not the symptom"],
+    ["SHIP",     "out the door"]
+  ];
+  const TERM_LINES = [
+    ["starting agent", ""], ["analysing project", ""], ["planning changes", ""],
+    ["writing code", ""], ["running tests", ""], ["fixing issues", "warn"],
+    ["build successful", "ok"]
+  ];
+  const WORDS = ["STARFALL","HMOV","AI AGENTS","CODE","EXPERIMENT","BUILD","REPEAT"];
+
+  /* ── render: static lists ─────────────────────────────────────── */
+  $("#do-list").innerHTML = DO_ITEMS.map((t, i) =>
+    `<div class="do-item"><i>${String(i + 1).padStart(2, "0")}</i><b>${t}</b></div>`).join("");
+
+  $("#love-cards").innerHTML = LOVE.map(([t, sub, more], i) => `
+    <button class="card" type="button" aria-expanded="false">
+      <span class="idx">0${i + 1}</span>
+      <h3>${t}</h3>
+      <p class="sub">${sub}</p>
+      <span class="more"><div><p>${more}</p></div></span>
+      <span class="hintline">more</span>
+    </button>`).join("");
+
+  $("#agent-loop").innerHTML = AGENT_STEPS.map(([t, note], i) =>
+    (i ? `<div class="arrow" aria-hidden="true">↓</div>` : "") +
+    `<div class="loop-step" data-on="0"><em>${String(i + 1).padStart(2, "0")}</em><b>${t}</b><small>${note}</small></div>`
+  ).join("");
+
+  $("#words").innerHTML = WORDS.map(w => `<span>${w}</span>`).join("");
+
+  /* ── reveal on scroll ─────────────────────────────────────────── */
+  const revealIO = new IntersectionObserver((es) => {
+    es.forEach(e => { if (e.isIntersecting) { e.target.classList.add("in"); revealIO.unobserve(e.target); } });
+  }, { rootMargin: "0px 0px -8% 0px", threshold: 0.08 });
+  $$("[data-reveal]").forEach((el, i) => {
+    el.style.transitionDelay = `${Math.min(i % 4, 3) * 70}ms`;
+    revealIO.observe(el);
+  });
+
+  /* ── scroll progress + sticky header ──────────────────────────── */
+  const bar = $("#progress"), header = $("#site-header");
+  let ticking = false;
+  const onScroll = () => {
+    const max = document.documentElement.scrollHeight - innerHeight;
+    bar.style.transform = `scaleX(${max > 0 ? Math.min(scrollY / max, 1) : 0})`;
+    header.classList.toggle("stuck", scrollY > 8);
+    ticking = false;
+  };
+  addEventListener("scroll", () => { if (!ticking) { ticking = true; requestAnimationFrame(onScroll); } }, { passive: true });
+  onScroll();
+
+  /* ── nav: mobile menu + active section ────────────────────────── */
+  const menuBtn = $("#menu-btn"), links = $("#nav-links");
+  menuBtn.addEventListener("click", () => {
+    const open = links.classList.toggle("open");
+    menuBtn.setAttribute("aria-expanded", String(open));
+    menuBtn.textContent = open ? "Close" : "Menu";
+  });
+  links.addEventListener("click", e => {
+    if (e.target.tagName === "A" && links.classList.contains("open")) menuBtn.click();
+  });
+
+  const navMap = new Map($$("#nav-links a").map(a => [a.hash.slice(1), a]));
+  const secIO = new IntersectionObserver((es) => {
+    es.forEach(e => {
+      const a = navMap.get(e.target.id);
+      if (a && e.isIntersecting) {
+        navMap.forEach(x => x.removeAttribute("aria-current"));
+        a.setAttribute("aria-current", "true");
+      }
+    });
+  }, { rootMargin: "-45% 0px -50% 0px" });
+  [...navMap.keys()].forEach(id => { const el = document.getElementById(id); if (el) secIO.observe(el); });
+
+  $("#to-top").addEventListener("click", () =>
+    scrollTo({ top: 0, behavior: reduced ? "auto" : "smooth" }));
+
+  /* ── hero pointer glow ────────────────────────────────────────── */
+  const glow = $("#hero-glow"), hero = $("#top");
+  if (!reduced && matchMedia("(pointer:fine)").matches) {
+    hero.addEventListener("pointermove", e => {
+      const r = hero.getBoundingClientRect();
+      glow.style.setProperty("--mx", `${e.clientX - r.left}px`);
+      glow.style.setProperty("--my", `${e.clientY - r.top}px`);
+    });
+  }
+
+  /* ── card: expand + cursor-tracked sheen ──────────────────────── */
+  $$("#love-cards .card").forEach(card => {
+    card.addEventListener("click", () => {
+      const open = card.getAttribute("aria-expanded") === "true";
+      card.setAttribute("aria-expanded", String(!open));
+      $(".hintline", card).firstChild.textContent = open ? "more" : "less";
+    });
+    card.addEventListener("pointermove", e => {
+      const r = card.getBoundingClientRect();
+      card.style.setProperty("--cx", `${e.clientX - r.left}px`);
+      card.style.setProperty("--cy", `${e.clientY - r.top}px`);
+    });
+  });
+
+  /* ── cycle ring (section 1) ───────────────────────────────────── */
+  const cycleEl = $("#cycle"), stepEl = $("#cycle-step"), noteEl = $("#cycle-note"),
+        loopEl = $("#cycle-loop"), ring = $("#ring-live");
+  const CIRC = 2 * Math.PI * 86, SEG = CIRC / 6 - 10;
+  ring.setAttribute("stroke-dasharray", `${SEG} ${CIRC - SEG}`);
+
+  CYCLE.forEach(([name], i) => {
+    const n = document.createElement("div");
+    n.className = "node";
+    n.dataset.on = i === 0 ? "1" : "0";
+    n.style.setProperty("--a", `${-90 + i * 60}deg`);
+    n.textContent = name;
+    cycleEl.appendChild(n);
+  });
+  const nodes = $$(".node", cycleEl);
+
+  const sizeRing = () => {
+    const w = cycleEl.clientWidth;
+    if (w > 0) cycleEl.style.setProperty("--rad", `${w * 0.385}px`);
+  };
+  sizeRing();
+  if (window.ResizeObserver) new ResizeObserver(sizeRing).observe(cycleEl);
+  else addEventListener("resize", sizeRing);
+
+  let ci = 0, cTimer = null, showingLoop = false;
+  const paintCycle = () => {
+    nodes.forEach((n, i) => n.dataset.on = i === ci && !showingLoop ? "1" : "0");
+    ring.style.strokeDashoffset = `${-(ci * CIRC / 6) + SEG / 2}`;
+    if (showingLoop) {
+      stepEl.textContent = "NEW IDEA";
+      noteEl.textContent = "Which is where this started.";
+      loopEl.dataset.on = "1";
+    } else {
+      stepEl.textContent = CYCLE[ci][0];
+      noteEl.textContent = CYCLE[ci][1];
+      loopEl.dataset.on = "0";
+    }
+  };
+  const tick = () => {
+    if (showingLoop) { showingLoop = false; ci = 0; }
+    else if (ci === CYCLE.length - 1) showingLoop = true;
+    else ci++;
+    paintCycle();
+  };
+  const startCycle = () => { if (!cTimer && !reduced) cTimer = setInterval(tick, 1700); };
+  const stopCycle = () => { clearInterval(cTimer); cTimer = null; };
+  new IntersectionObserver(es => es[0].isIntersecting ? startCycle() : stopCycle(),
+    { threshold: 0.25 }).observe(cycleEl);
+  document.addEventListener("visibilitychange", () => document.hidden && stopCycle());
+
+  /* ── agent loop highlighter ───────────────────────────────────── */
+  const steps = $$("#agent-loop .loop-step");
+  let ai = 0, aTimer = null;
+  const aTick = () => {
+    steps.forEach((s, i) => s.dataset.on = i === ai ? "1" : "0");
+    ai = (ai + 1) % steps.length;
+  };
+  new IntersectionObserver(es => {
+    if (es[0].isIntersecting && !aTimer && !reduced) { aTick(); aTimer = setInterval(aTick, 900); }
+    else if (!es[0].isIntersecting) { clearInterval(aTimer); aTimer = null; }
+  }, { threshold: 0.2 }).observe($("#agent-loop"));
+
+  /* ── terminal typewriter ──────────────────────────────────────── */
+  const term = $("#term");
+  let tTimers = [];
+  const clearTerm = () => { tTimers.forEach(clearTimeout); tTimers = []; term.innerHTML = ""; };
+  const wait = ms => new Promise(r => tTimers.push(setTimeout(r, ms)));
+
+  let running = false;
+  async function runTerm() {
+    if (running) return;
+    running = true;
+    clearTerm();
+    const cur = document.createElement("span");
+    cur.className = "cur";
+    cur.setAttribute("aria-hidden", "true");
+    for (const [text, kind] of TERM_LINES) {
+      const line = document.createElement("span");
+      line.className = "l" + (kind ? " " + kind : "");
+      term.appendChild(line);
+      term.appendChild(cur);
+      if (reduced) { line.textContent = text; }
+      else {
+        for (const ch of text) { line.textContent += ch; await wait(22); }
+      }
+      await wait(reduced ? 40 : 320);
+    }
+    running = false;
+  }
+  new IntersectionObserver(es => { if (es[0].isIntersecting) runTerm(); }, { threshold: 0.3 })
+    .observe(term);
+  $("#term-replay").addEventListener("click", () => { running = false; runTerm(); });
+
+  /* ── real-job reveal ──────────────────────────────────────────── */
+  const rBtn = $("#reveal-btn"), rBox = $("#real-answer");
+  rBtn.addEventListener("click", () => {
+    const open = rBox.classList.toggle("open");
+    rBtn.setAttribute("aria-expanded", String(open));
+    rBtn.innerHTML = open ? 'Fair enough <span aria-hidden="true">✓</span>' : 'Answer <span aria-hidden="true">→</span>';
+  });
+  new IntersectionObserver(es => {
+    if (es[0].isIntersecting && !rBox.classList.contains("open")) {
+      tTimers.push(setTimeout(() => rBtn.click(), 900));
+    }
+  }, { threshold: 0.5 }).observe($("#realjob"));
+})();
+</script>
+</body>
+</html>
